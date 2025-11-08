@@ -10,6 +10,8 @@ Formula* criaFormula(int n, int m);
 void destroiFormula(Formula **f);
 void adicionaClausula(Formula *f, int i, int a, int b, int c);
 void imprimeFormula(Formula *f);
-void solucaoFormula(); // deve usar recursion
+int solucaoFormula(Formula *f, int n); // deve usar recursion
+int verificaClausula(Clausula *c);
+int[3] proxVeri(int vet[3]);
 
 #endif
