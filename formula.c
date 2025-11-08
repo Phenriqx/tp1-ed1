@@ -23,7 +23,7 @@ Formula* criaFormula(int n, int m) {
         return NULL;
     }
 
-    formula->clausulas = (Clausula*) malloc(m * sizeof(Clausula));
+    formula->clausulas = malloc(m * sizeof(Clausula));
     if (!formula->clausulas) 
         return NULL;
 
@@ -33,41 +33,47 @@ Formula* criaFormula(int n, int m) {
     return formula;
 }
 
-void destroiFormula(Formula** f) {
-    if ((*f)->clausulas) {
-        free((*f)->clausulas);
-        (*f)->clausulas = NULL;
+void destroiFormula(Formula* f) {
+    if (f->clausulas) {
+        free(f->clausulas);
+        f->clausulas = NULL;
     }
 
-    free(*f);
-    *f = NULL;
+    free (f);
+    f = NULL;
 }
 
-void adicionaClausula(Formula *f, int i, int a, int b, int c) {
+void adicionaClausula(Formula *f, int r, int *vetAdd) {
     if (!f)
         return;
 
     // n variaveis  (n v n+1 v n+2 ... v nx)
 
-    for(int i = 0; i < f->m; i++){
 
-        for(int j = 0; j < f->n; j++){
-
-            if(f->clausulas[i].val[j] < 0){
-
-                f->clausulas[i].valorLogico[j] = 0;
+    for(int i = 0; i < f->n; i++){
+        f->clausulas[r].val[i] = vetAdd[i];
 
 
-            }else{
+    }
+
+
+    for(int i = 0; i < f->n; i++){
+
+        if(f->clausulas[r].val[i] < 0){
+
+            f->clausulas[r].valorLogico[i] = 0;
+
+
+        }else{
                 
-                f->clausulas[i].valorLogico[j] = 1; 
+            f->clausulas[r].valorLogico[i] = 1; 
 
-
-            }
 
         }
 
     }
+
+    
 }
 
 void imprimeFormula(Formula *f) {
@@ -100,48 +106,82 @@ char intToChar(int v) {
 
 int solucaoFormula(Formula *f, int n, int *vet){
 
-    if(f->m == n){
+    for(int i = 0; i < pow(2, f->n); i++){
+        int saida = verificaCada(f, n, vet);
 
-        return verificaClausula;
+        if(saida == 1){
+            printf("\nDeu certo %d %d %d\n", vet[0], vet[1], vet[2]);
+            return 1;
+            i = 8;
 
-    }
+        }else{
 
+            proxVeri(f, vet);
 
-    return solucaoFormula(f, n + 1, vet);
-    
-
-
-}
-
-int verificaClausula(Clausula *c, Formula *f, int *vet) {
-    
-
-    for(int i = 0; i < 3; i++){
-
-        if(c->valorLogico[i] == 0){
-            vet[i] = !vet[i];
         }
 
 
     }
+    
+    return 0;
 
-    return vet[0] | vet[1] | vet[2];
+
+}
+
+int verificaCada(Formula *f, int n, int *vet){
+    if(f->m == n){
+
+        return verificaClausula(f->clausulas[n], f, vet);
 
 
+    }
+
+
+    int saida = verificaCada(f, n + 1, vet);
+
+    if(saida == 0){
+        return 0;
+    }else{
+        return verificaClausula(f->clausulas[n], f, vet);
+    }
+
+
+}
+
+int verificaClausula(Clausula c, Formula *f, int *vet) {
+    
+    int *vetClone = malloc(f->n * sizeof(int));
+
+
+    for(int i = 0; i < f->n; i++){
+
+        vetClone[i] = vet[i];
+
+        if(c.valorLogico[i] == 0){
+            vetClone[i] = !vetClone[i];
+        }
+
+
+    }
+    int result = vetClone[0] | vetClone[1] | vetClone[2];
+
+    free(vetClone);
+
+    return result;
 
 }
 
 //  111
 //  110
 
-int *proxVeri(int *vet){
+void proxVeri(Formula *f, int *vet){
 
-        for(int j = 3; j >0; j-- ){
+        for(int j = (f->n -1); j >=0; j--){
 
             vet[j] = !vet[j];
 
             if(vet[j] == 0){
-                return vet;
+                break;
             }
 
 
