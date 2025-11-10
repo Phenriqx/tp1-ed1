@@ -52,6 +52,7 @@ void adicionaClausula(Formula *f) {
 }
 
 void imprimeFormula(Formula *f) {
+    printf("\n");
     for (int i = 0; i < f->m; i++) {
         printf("( ");
         for (int j = 0; j < 3; j++) {
@@ -59,8 +60,8 @@ void imprimeFormula(Formula *f) {
                 printf("%c ", intToChar(f->clausulas[i].val[j]));
             else 
                 printf("~%c ", intToChar(f->clausulas[i].val[j] * -1));
-            if (j < f->n - 1)
-                printf(" V ");
+            if (j < 2)
+                printf(" v ");
         }
         printf(" )");
         if (i < f->m - 1)
