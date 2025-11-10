@@ -130,8 +130,8 @@ int verificaClausula(Formula *f, int *vet, int n, int *vetAux) {
 
 
         for(int j = 0; j < f->n; j++){
-
-            if(vetAux[i] == f->clausulas[n].val[j]){
+//Alterar, talvez fazer um outro for dentro
+            if(vetAux[j] == f->clausulas[n].val[i]){
                 vetClone[j] = vet[j];
 
             }
