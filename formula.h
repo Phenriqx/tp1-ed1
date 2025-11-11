@@ -17,6 +17,6 @@ void proxVeri(Formula *f, int *vet);
 void limpaAdd(int *vet, int n);
 void imprimirClausulas(Formula *formula);
 
-void limpar_buffer();
+char intToChar(int v);
 
 #endif

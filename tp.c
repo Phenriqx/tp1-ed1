@@ -6,7 +6,6 @@ int main() {
     int n, m;
 
     scanf("%d %d", &n, &m);
-    limpar_buffer();
     Formula *formula = criaFormula(n, m);
 
     int *vet = malloc(n * sizeof(int));
@@ -19,15 +18,26 @@ int main() {
     }
 
     adicionaClausula(formula);
-    //limpaAdd(vetAdd, n);        
 
-    //imprimirClausulas(formula);
+    if (solucaoFormula(formula, 0, vet, vetAux)) {
+        printf("\nFórmula:");
+        imprimeFormula(formula);
 
-    solucaoFormula(formula, 0, vet, vetAux);
-
-    imprimeFormula(formula);
+        printf("Solução encontrada:\n");
+        for (int i = 0; i < n; i++) {
+            if (vet[i] == 1) 
+                printf("%c:  True\n", intToChar(i + 1));
+            else
+                printf("%c:  False\n", intToChar(i + 1));
+        }
+    }
+    else 
+        printf("\nFórmula insatisfazível!\n");
+    
     destroiFormula(formula);
+    
     free(vet);
     free(vetAux);
+
     return 0;
 }
